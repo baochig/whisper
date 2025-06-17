@@ -1,6 +1,36 @@
 import os
 from faster_whisper import WhisperModel
 
+
+def get_available_memory_gb():
+    """Return available system memory in GB, or None if unavailable."""
+    try:
+        import psutil
+        return psutil.virtual_memory().available / (1024 ** 3)
+    except Exception:
+        pass
+    if hasattr(os, "sysconf"):
+        try:
+            pages = os.sysconf("SC_AVPHYS_PAGES")
+            page_size = os.sysconf("SC_PAGE_SIZE")
+            return pages * page_size / (1024 ** 3)
+        except (OSError, ValueError, AttributeError):
+            pass
+    return None
+
+
+def check_environment(required_memory_gb=2):
+    """Print a simple environment check for available memory."""
+    mem_gb = get_available_memory_gb()
+    if mem_gb is None:
+        print("⚠️ 無法取得可用記憶體資訊")
+        return
+    print(f"➡️ 可用記憶體: {mem_gb:.2f} GB")
+    if mem_gb < required_memory_gb:
+        print(
+            f"❌ 可用記憶體不足，建議至少 {required_memory_gb} GB，可考慮改用較小模型或增加記憶體。"
+        )
+
 def format_timestamp(seconds):
     """ 將秒數轉換為 MM:SS.sss 格式 """
     minutes = int(seconds // 60)
@@ -99,4 +129,5 @@ if __name__ == "__main__":
     parser.add_argument("audio_file", help="Path to the audio file to transcribe")
     args = parser.parse_args()
 
+    check_environment(required_memory_gb=2)
     transcribe_audio(args.audio_file)
