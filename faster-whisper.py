@@ -91,9 +91,12 @@ def transcribe_audio(file_path):
 
     print(f"✅ 轉錄完成，結果已儲存至: {output_txt}")
 
-# **🔹 設定音檔名稱**
-audio_file = f"20250616_4G轉5GS包裝修正DA效期議題.wav"  # **請修改為你的音檔名稱**
-
-# **🔹 執行轉錄**
+# **🔹 透過參數指定音檔名稱**
 if __name__ == "__main__":
-    transcribe_audio(audio_file)
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Transcribe audio with faster-whisper")
+    parser.add_argument("audio_file", help="Path to the audio file to transcribe")
+    args = parser.parse_args()
+
+    transcribe_audio(args.audio_file)
