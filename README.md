@@ -1,2 +1,8 @@
 # whisper
-use faster whisper to translation text
+Use faster-whisper to transcribe audio.
+
+## Usage
+
+```bash
+python faster-whisper.py <audio_file.wav>
+```
