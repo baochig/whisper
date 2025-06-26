@@ -1,0 +1,6 @@
+pysrt
+pycorrector
+opencc-python-reimplemented
+textblob
+tqdm
+pyyaml
